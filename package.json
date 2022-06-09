@@ -5,7 +5,8 @@
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2020 browser module main",
-    "start": "nx serve",
+    "start:FE": "nx serve book-appointment",
+    "start:BE": "nx serve",
     "build": "nx build",
     "test": "nx test"
   },
@@ -23,6 +24,9 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
     "@nrwl/angular": "14.2.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
+    "redis": "^4.1.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.4.0",
     "tslib": "^2.0.0",

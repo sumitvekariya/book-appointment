@@ -1,4 +1,6 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { AuthMiddleware } from '../middleware/auth.middleware';
+import { RedisCacheService } from '../utils/redis.service';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -6,6 +8,12 @@ import { AppService } from './app.service';
 @Module({
   imports: [],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RedisCacheService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes({ path: 'categories', method: RequestMethod.GET});
+  }
+}
