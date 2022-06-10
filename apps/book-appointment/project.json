@@ -5,7 +5,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/book-appointment",
         "index": "apps/book-appointment/src/index.html",
@@ -17,7 +19,10 @@
           "apps/book-appointment/src/favicon.ico",
           "apps/book-appointment/src/assets"
         ],
-        "styles": ["apps/book-appointment/src/styles.scss"],
+        "styles": [
+          "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+          "apps/book-appointment/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -85,7 +90,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/book-appointment"],
+      "outputs": [
+        "coverage/apps/book-appointment"
+      ],
       "options": {
         "jestConfig": "apps/book-appointment/jest.config.ts",
         "passWithNoTests": true
