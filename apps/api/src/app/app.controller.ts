@@ -1,9 +1,12 @@
-import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 
-import { Message, Login, Categories } from '@book-appointmnet/api-interfaces';
-
+import { Message } from '@book-appointmnet/api-interfaces';
+import { Response } from 'express';
 import { AppService } from './app.service';
 import { LoginDto } from '../dto/login.dto';
+import { SlotDto } from '../dto/slot.dto';
+import { BookSlotDto } from '../dto/bookSlot.dto';
+import { GetAppointmentDto } from '../dto/getAppointment.dto';
 
 @Controller()
 export class AppController {
@@ -17,20 +20,66 @@ export class AppController {
   @Post('login')
   @UsePipes(new ValidationPipe())
   async login(
-    @Body() loginDto: LoginDto
+    @Body() loginDto: LoginDto,
+    @Res() res: Response
   ) {
     const response = await this.appService.login(loginDto);
-    return { data: response}
+    return res.status(200).send({
+      data: response
+    });
   }
 
   @Get('categories')
-  getCategories() {
-    return {
+  getCategories(
+    @Res() res: Response
+  ) {
+    return res.status(200).send({
       data: [
         'Full Body Checkup',
         'Dental Checkup',
         'Eye Checkup'
       ]
+    });
+  }
+
+  @Post('slots')
+  async getSlots(
+    @Res() res: Response,
+    @Body() slotDto: SlotDto
+  ) {
+    const response = await this.appService.generateSlots(slotDto.date);
+    return res.status(200).send({
+      data: response
+    });
+  }
+
+  @Post('book/slot')
+  async bookSlot(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() bookSlotDto: BookSlotDto
+  ) {
+    try {
+      const response = await this.appService.bookSlot(bookSlotDto, req['userData']);
+      return res.status(200).send({
+        message: 'Slot booked successfully',
+        data: response
+      });
+    } catch (err) {
+      return res.status(400).send({
+        message: err.message
+      });
     }
+  }
+
+  @Get('appointments')
+  async getAppointment(
+    @Res() res: Response,
+    @Query() appointmentDto: GetAppointmentDto
+  ) {
+    const response = await this.appService.getAppointments(appointmentDto);
+    return res.status(200).send({
+      data: response
+    });
   }
 }

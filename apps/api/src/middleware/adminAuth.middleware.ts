@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { RedisCacheService } from '../utils/redis.service';
 
 @Injectable()
-export class AuthMiddleware implements NestMiddleware {
+export class AdminAuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     
     if (!req.headers.authorization) {
@@ -20,7 +20,7 @@ export class AuthMiddleware implements NestMiddleware {
     
     const tokenData = await client.json.get(req.headers.authorization);
 
-    if (!tokenData || tokenData?.role !== 'user') {
+    if (!tokenData || tokenData?.role !== 'admin') {
       return res
       .status(401)
       .json({

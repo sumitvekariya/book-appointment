@@ -1,5 +1,5 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
-import { createClient } from 'redis';
+import { Injectable } from '@nestjs/common';
+import { createClient, SchemaFieldTypes } from 'redis';
 
 @Injectable()
 export class RedisCacheService {
@@ -12,5 +12,31 @@ export class RedisCacheService {
 
   getClient() {
     return this.client;
+  }
+
+  async generateIndex() {
+    // create index
+    try {
+      await this.client.ft.create('idx:slots', {
+        '$.date': {
+          type: SchemaFieldTypes.TEXT,
+          AS: 'date'
+        },
+        '$.email': {
+          type: SchemaFieldTypes.TEXT,
+          AS: 'email'
+        },
+        '$.name': {
+          type: SchemaFieldTypes.TEXT,
+          AS: 'name'
+        }
+      },
+      {
+        ON: 'JSON',
+        PREFIX: 'booked:slots'
+      });
+    } catch (err) {
+      console.log("Index already created")
+    }
   }
 }
