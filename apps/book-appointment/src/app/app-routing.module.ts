@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { SignInComponent } from './sign-in/sign-in.component';
+import { CustomerHomeComponent } from './customer-home/customer-home.component';
+import { SignInComponent } from './sign-in/sign-in.component'
 
 @NgModule({
   declarations: [],
@@ -9,6 +10,10 @@ import { SignInComponent } from './sign-in/sign-in.component';
       {
         path: 'sign-in',
         component: SignInComponent
+      },
+      {
+        path: 'customer-home',
+        component: CustomerHomeComponent
       }
     ])
   ],

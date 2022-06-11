@@ -25,8 +25,8 @@ export class AppService {
       if (loginDto.email && loginDto.password) {
         const token = Math.ceil((Math.random() * new Date().getTime())).toString();
 
-        const key = `${token}`;
-
+        const key = `${loginDto.email}`;
+        const key2 = `${token}`;
         const redisData = await this.client.json.get(key);
 
         const response: Login = {
@@ -36,6 +36,9 @@ export class AppService {
           role: loginDto.email.indexOf('user') >= 0 ? 'user' : 'admin'
         };
 
+        if (!redisData?.token) {
+          await this.client.json.set(key2, '.', response);  
+        }
         await this.client.json.set(key, '.', response);
 
         return response;

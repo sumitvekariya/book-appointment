@@ -25,6 +25,7 @@ export class AppController {
   ) {
     const response = await this.appService.login(loginDto);
     return res.status(200).send({
+      message: "Login successfully",
       data: response
     });
   }

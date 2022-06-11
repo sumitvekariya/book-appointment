@@ -1,0 +1,31 @@
+.customer-home-container {
+  margin: auto;
+
+  .main-container {
+    max-width: 90%;
+    margin: auto;
+    padding: 20px;
+
+    .select-container {
+      display: inline-flex;
+
+      .category {
+        padding-left: 20px;
+      }
+    }
+
+    .slots {
+      border: 1px solid black;
+      padding: 15px;
+    }
+
+  }
+
+  .header {
+    background-color: #fdcd94;
+  }
+
+  .red-backgroud {
+    background-color: #f79c9c;
+  }
+}

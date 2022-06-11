@@ -1,0 +1,47 @@
+<div class="customer-home-container">
+  <mat-card class="header">
+      <mat-card-content>
+        Schedule your appointment
+      </mat-card-content>
+  </mat-card>
+
+  <div class="main-container">
+    <form [formGroup]="DateFormGroup">
+      <!-- <div class="datePicker"> -->
+        <div class="select-container">
+          <div>
+            <mat-form-field appearance="fill">
+              <mat-label>Choose a date</mat-label>
+              <input matInput [matDatepicker]="picker" [min]="todayDate" formControlName="date" (dateChange)="dateChange($event)">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        
+          <div class="category">
+            <mat-form-field appearance="fill">
+              <mat-label>Choose Category</mat-label>
+              <mat-select formControlName="category" (selectionChange)="selectionChange()">
+                <mat-option *ngFor="let category of categories" [value]="category">
+                  {{category}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      <!-- </div> -->
+    </form>
+  
+    <div class="slots">
+        <mat-chip-list selectable>
+          <mat-chip #c="matChip" *ngFor="let option of slots; let index=index" [value]="option" (click)="click(c, option, index)" [ngClass]="{'red-backgroud': option.isBooked }">
+            {{option['startTime'] | date : 'h:mm a'}} - {{option['endTime'] | date : 'h:mm a'}}
+        </mat-chip>
+        </mat-chip-list>
+    </div>
+    <br>
+    <div class="book-button">
+      <button mat-raised-button color="primary" [disabled]="disabled" (click)="bookAppointment()">Book</button>
+    </div>
+  </div>
+</div>

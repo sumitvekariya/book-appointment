@@ -10,18 +10,37 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { MaterialModule } from './material.module';
+import { ToastrModule } from 'ngx-toastr';
+import { CustomerHomeComponent } from './customer-home/customer-home.component';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import {
+  MAT_MOMENT_DATE_FORMATS,
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent, SignInComponent],
+  declarations: [AppComponent, NxWelcomeComponent, SignInComponent, CustomerHomeComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      preventDuplicates: true
+    })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
