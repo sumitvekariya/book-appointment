@@ -1,0 +1,88 @@
+.admin-home-container {
+  margin: auto;
+
+  .main-container {
+    max-width: 90%;
+    margin: auto;
+    padding: 20px;
+
+    .select-container {
+      display: inline-flex;
+
+      .search {
+        padding-left: 20px;
+      }
+    }
+
+    .slots {
+      padding: 15px;
+
+      table {
+        width: 100%;
+      }
+      
+      tr.example-detail-row {
+        height: 0;
+      }
+      
+      tr.example-element-row:not(.example-expanded-row):hover {
+        background: whitesmoke;
+      }
+      
+      tr.example-element-row:not(.example-expanded-row):active {
+        background: #efefef;
+      }
+      
+      .example-element-row td {
+        border-bottom-width: 0;
+      }
+      
+      .example-element-detail {
+        overflow: hidden;
+        display: flex;
+      }
+      
+      .example-element-diagram {
+        min-width: 80px;
+        padding: 8px;
+        font-weight: lighter;
+        margin: 8px 0;
+        height: 104px;
+      }
+      
+      .example-element-symbol {
+        font-weight: bold;
+        font-size: 25px;
+        line-height: normal;
+        
+      }
+      
+      .example-element-description {
+        padding: 16px 0px 5px 16px;
+      }
+      
+      .example-element-description-attribution {
+        padding-left: 5px;
+        display: inline-flex;
+      }
+
+      .category {
+        padding: 0px 4px 0px 4px;
+        background: #ffd17d;
+        width: auto;
+        border-radius: 20px;
+        text-align: center;
+        margin-left: 8px;
+      }
+    }
+
+  }
+
+  .header {
+    background-color: #fdcd94;
+  }
+
+  .red-backgroud {
+    background-color: #f79c9c;
+  }
+}

@@ -28,7 +28,11 @@ export class SignInComponent implements OnInit {
     this.apiService.postReqWithOutToken('/login', this.signInForm.value).then((data: any) => {
       localStorage.setItem('authorization', data.data.token);
       this.toastr.success(data.message);
-      this.router.navigate(['customer-home']);
+      if (data.data.role === 'user') {
+        this.router.navigate(['customer-home']);
+      } else {
+        this.router.navigate(['admin-home']);
+      }
     }).catch(err => {
       console.log(err)
       this.toastr.success(err.message);

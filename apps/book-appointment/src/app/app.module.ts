@@ -18,9 +18,10 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
+import { AdminHomeComponent } from './admin-home/admin-home.component';
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent, SignInComponent, CustomerHomeComponent],
+  declarations: [AppComponent, NxWelcomeComponent, SignInComponent, CustomerHomeComponent, AdminHomeComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
