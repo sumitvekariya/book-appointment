@@ -5,7 +5,7 @@ import { MAT_DATE_FORMATS } from '@angular/material/core';
 import * as moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-
+import { Router } from '@angular/router';
 interface slot {
   startTime: string;
   endTime: string;
@@ -18,6 +18,7 @@ interface bookedSlots {
   startTime: string;
   endTime: string;
   category: string;
+  originalDate: string;
   slots: slot[]
 }
 
@@ -64,37 +65,48 @@ export class AdminHomeComponent implements OnInit {
   displayedColumns: string[] = ['name', 'email', 'date'];
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
   expandedElement: bookedSlots | null = null;
+  startDate!: string;
+  endDate!: string;
+
 
   constructor(
     private apiService: ApiService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.todayDate = moment().format('YYYY-MM-DD');
     this.date.setValue(this.todayDate);
 
-    this.selectedDate = this.todayDate;
+    this.startDate = this.todayDate;
+    this.endDate = this.todayDate;
     this.DateFormGroup = new UntypedFormGroup({
       date: new FormControl(this.todayDate, [Validators.required]),
       email: new FormControl(''),
+      endDate: new FormControl(this.todayDate, [Validators.required])
     });
     this.getBookedSlots();
   }
 
   getBookedSlots(params: any = null) {
-    this.apiService.getReqWithToken('/appointments', { ...params, date: this.selectedDate }).then((data: any) => {
+    this.apiService.getReqWithToken('/appointments', { ...params, date: this.startDate, endDate: this.endDate }).then((data: any) => {
       this.dataSource = data.data;
     }).catch(err => {
       console.log(err)
-      this.toastr.error(err.message);
+      if (err.status == 401) {
+        this.router.navigate(['sign-in'])
+      }
+      // this.toastr.error(err.message);
     })
   }
 
   dateChange(event: any) {
-    const date = moment(event.value).format('YYYY-MM-DD');
-    this.selectedDate = date;
-    this.getBookedSlots();
+    if (this.DateFormGroup.value.date && this.DateFormGroup.value.endDate) {
+      this.startDate = moment(this.DateFormGroup.value.date).format('YYYY-MM-DD');
+      this.endDate = moment(this.DateFormGroup.value.endDate).format('YYYY-MM-DD');
+      this.getBookedSlots();
+    }
   }
 
   selectionChange() {

@@ -4,7 +4,6 @@ import { Message, Login } from '@book-appointmnet/api-interfaces';
 import { LoginDto } from '../dto/login.dto';
 import { RedisCacheService } from '../utils/redis.service';
 import { BookSlotDto } from '../dto/bookSlot.dto';
-import { SchemaFieldTypes } from 'redis'; 
 import { GetAppointmentDto } from '../dto/getAppointment.dto';
 @Injectable()
 export class AppService {
@@ -95,8 +94,10 @@ export class AppService {
   async bookSlot(bookSlotDto: BookSlotDto, userData: Login) {
     // check that incoming is booked or not
     try {
-      const date = moment(bookSlotDto.startTime).format('YYYY-MM-DD').replace(/\-/g, '');
-      const key = `booked:slots:${userData.email}:${date}`;
+      const timeStamp = new Date(new Date(bookSlotDto.startTime).setHours(0,0,0,0)).getTime();
+      const date = moment(bookSlotDto.startTime).format('YYYY-MM-DD');
+      const dateSlug = date.replace(/\-/g, '');
+      const key = `booked:slots:${userData.email}:${dateSlug}`;
   
       const data = await this.client.json.get(key);
       // console.log("data ", data)
@@ -113,6 +114,7 @@ export class AppService {
         "name": userData.name,
         "email": userData.email,
         "date": date,
+        "timeStamp": timeStamp,
         "slots" : [{
           "startTime": bookSlotDto.startTime,
           "endTime": bookSlotDto.endTime,
@@ -137,18 +139,26 @@ export class AppService {
       throw err;
     }
   }
-
+  
   async getAppointments(appointmentDto: GetAppointmentDto) {
     try {
       const dateSlug = moment(appointmentDto.date).format('YYYY-MM-DD').replace(/\-/g, '');
-  
-      let serchString = `@date:(${dateSlug})`;
+      
+      const timeStamp = new Date(new Date(appointmentDto.date).setHours(0,0,0,0)).getTime();
+      let searchString = `@timeStamp:[${timeStamp} ${timeStamp}]`;
 
-      if (appointmentDto.name) {
-        serchString += `,@name:(${appointmentDto.name}),@email:(${appointmentDto.name})`
+      if (appointmentDto.endDate) {
+        const endTimeStamp = new Date(new Date(appointmentDto.endDate).setHours(0,0,0,0)).getTime();
+        searchString = `@timeStamp:[${timeStamp} ${endTimeStamp}]`
       }
 
-      const bookSlots = await this.client.ft.search('idx:slots', `${serchString}`);
+      if (appointmentDto.name) {
+        searchString += `,@name:(${appointmentDto.name}*),@email:(${appointmentDto.name}*)`
+      }
+
+      // searchString += ` SORTBY timeStamp`;
+
+      const bookSlots = await this.client.ft.search('idx:slots', `${searchString}`);
       const response = [];
 
       if (bookSlots?.documents?.length) {

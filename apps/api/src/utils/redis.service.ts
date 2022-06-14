@@ -18,9 +18,9 @@ export class RedisCacheService {
     // create index
     try {
       await this.client.ft.create('idx:slots', {
-        '$.date': {
-          type: SchemaFieldTypes.TEXT,
-          AS: 'date'
+        '$.timeStamp': {
+          type: SchemaFieldTypes.NUMERIC,
+          AS: 'timeStamp'
         },
         '$.email': {
           type: SchemaFieldTypes.TEXT,
