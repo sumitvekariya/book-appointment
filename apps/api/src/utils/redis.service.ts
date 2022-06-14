@@ -5,7 +5,12 @@ import { createClient, SchemaFieldTypes } from 'redis';
 export class RedisCacheService {
   public client;
   constructor() {
-    this.client = createClient();
+    this.client = createClient({
+      url: process.env.REDIS_HOST,
+      username: process.env.REDIS_USERNAME,
+      password: process.env.REDIS_PASSWORD
+    });
+    // this.client = createClient();
     this.client.on('error', (err) => console.log('Redis Client Error', err));
     this.client.connect();
   }
