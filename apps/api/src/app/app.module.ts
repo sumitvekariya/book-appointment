@@ -16,7 +16,6 @@ export class AppModule {
     consumer
       .apply(AuthMiddleware)
       .forRoutes(
-        { path: 'categories', method: RequestMethod.GET},
         { path: 'slots', method: RequestMethod.POST},
         { path: 'book/slot', method: RequestMethod.POST}
       );

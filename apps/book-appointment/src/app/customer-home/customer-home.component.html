@@ -1,13 +1,10 @@
 <div class="customer-home-container">
-  <mat-card class="header">
-      <mat-card-content>
+      <mat-toolbar color="primary">
         Schedule your appointment
-      </mat-card-content>
-  </mat-card>
+      </mat-toolbar>
 
   <div class="main-container">
     <form [formGroup]="DateFormGroup">
-      <!-- <div class="datePicker"> -->
         <div class="select-container">
           <div>
             <mat-form-field appearance="fill">
@@ -29,7 +26,6 @@
             </mat-form-field>
           </div>
         </div>
-      <!-- </div> -->
     </form>
   
     <div class="slots">

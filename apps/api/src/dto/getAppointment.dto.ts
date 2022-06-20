@@ -11,4 +11,7 @@ export class GetAppointmentDto implements Readonly<GetAppointmentDto> {
   @IsNotEmpty()
   @IsString()
   name: string;
+
+  @IsString()
+  category: string;
 }

@@ -97,17 +97,19 @@ export class AppService {
       const timeStamp = new Date(new Date(bookSlotDto.startTime).setHours(0,0,0,0)).getTime();
       const date = moment(bookSlotDto.startTime).format('YYYY-MM-DD');
       const dateSlug = date.replace(/\-/g, '');
-      const key = `booked:slots:${userData.email}:${dateSlug}`;
+      const tsKey = new Date(bookSlotDto.startTime).getTime();
+      const key = `booked:slots:${userData.email}:${dateSlug}:${tsKey}`;
   
-      const data = await this.client.json.get(key);
-      // console.log("data ", data)
+      const keysForIncomingdate = await this.client.keys(`booked:slots:*`);
 
-      if (data?.slots) {
-        const bookedSlot = data.slots.find(obj => obj.startTime === bookSlotDto.startTime && obj.endTime === bookSlotDto.endTime);
-  
-        if (bookedSlot) {
-          throw new Error('This slot is already booked. Please choose another one.');
-        }
+      let result = await this.client.json.mGet(keysForIncomingdate, '$');
+      result = [].concat(...result);
+
+      if (result?.length) {
+          const bookedSlot = result.find(obj => obj.startTime === bookSlotDto.startTime && obj.endTime === bookSlotDto.endTime);
+          if (bookedSlot) {
+            throw new Error('This slot is already booked. Please choose another one.');
+          }
       }
 
       const obj = {
@@ -115,22 +117,12 @@ export class AppService {
         "email": userData.email,
         "date": date,
         "timeStamp": timeStamp,
-        "slots" : [{
-          "startTime": bookSlotDto.startTime,
-          "endTime": bookSlotDto.endTime,
-          "category": bookSlotDto.category
-        }]
+        "startTime": bookSlotDto.startTime,
+        "endTime": bookSlotDto.endTime,
+        "category": bookSlotDto.category
       }
-  
-      if (!data) {
-        await this.client.json.set(key, '$', obj);
-      } else {
-        await this.client.json.arrAppend(key, '.slots', {
-          "startTime": bookSlotDto.startTime,
-          "endTime": bookSlotDto.endTime,
-          "category": bookSlotDto.category
-        });
-      }
+      
+      await this.client.json.set(key, '$', obj);
   
       return true;
       
@@ -142,8 +134,9 @@ export class AppService {
   
   async getAppointments(appointmentDto: GetAppointmentDto) {
     try {
-      const dateSlug = moment(appointmentDto.date).format('YYYY-MM-DD').replace(/\-/g, '');
-      
+
+      let category = '';
+
       const timeStamp = new Date(new Date(appointmentDto.date).setHours(0,0,0,0)).getTime();
       let searchString = `@timeStamp:[${timeStamp} ${timeStamp}]`;
 
@@ -156,6 +149,10 @@ export class AppService {
         searchString += `,@name:(${appointmentDto.name}*),@email:(${appointmentDto.name}*)`
       }
 
+      if (appointmentDto.category) {
+        category = appointmentDto.category.trim()
+        searchString += `,@category:(${category}*)`
+      }
       // searchString += ` SORTBY timeStamp`;
 
       const bookSlots = await this.client.ft.search('idx:slots', `${searchString}`);

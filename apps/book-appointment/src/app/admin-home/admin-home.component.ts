@@ -19,9 +19,12 @@ interface bookedSlots {
   endTime: string;
   category: string;
   originalDate: string;
-  slots: slot[]
 }
 
+interface searchParam {
+  category?: string;
+  name?: string;
+}
 export const MY_DATE_FORMATS = {
   parse: {
     dateInput: 'YYYY-MM-DD',
@@ -55,19 +58,16 @@ export class AdminHomeComponent implements OnInit {
   todayDate!: string;
   date = new FormControl();
   DateFormGroup!: UntypedFormGroup;
-  slots: any[] = [];
-  categories: any[] = [];
+  categories: string[] = [];
   disabled = true;
   categorySelected = false;
   selectedDate!: string;
   value = '';
   dataSource: bookedSlots[] = [];
-  displayedColumns: string[] = ['name', 'email', 'date'];
-  columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
+  displayedColumns: string[] = ['name', 'email', 'date', 'slot', 'category'];
   expandedElement: bookedSlots | null = null;
   startDate!: string;
   endDate!: string;
-
 
   constructor(
     private apiService: ApiService,
@@ -84,9 +84,11 @@ export class AdminHomeComponent implements OnInit {
     this.DateFormGroup = new UntypedFormGroup({
       date: new FormControl(this.todayDate, [Validators.required]),
       email: new FormControl(''),
-      endDate: new FormControl(this.todayDate, [Validators.required])
+      endDate: new FormControl(this.todayDate, [Validators.required]),
+      category: new FormControl(''),
     });
     this.getBookedSlots();
+    this.getCategories();
   }
 
   getBookedSlots(params: any = null) {
@@ -109,14 +111,6 @@ export class AdminHomeComponent implements OnInit {
     }
   }
 
-  selectionChange() {
-    this.categorySelected = true;
-    const found = this.slots.find(obj => obj.isSelected);
-    if (found) {
-      this.disabled = false;
-    }
-  }
-
   inputChange(event: any) {
     this.getBookedSlots({ name: this.value });
   }
@@ -125,4 +119,27 @@ export class AdminHomeComponent implements OnInit {
     this.value = '';
     this.getBookedSlots();
   }
+
+  getCategories() {
+    this.apiService.getReqWithToken('/categories').then((data: any) => {
+      this.categories = data.data;
+    }).catch(err => {
+      console.log(err)
+      this.toastr.error(err.message);
+    })
+  }
+
+  selectionChange(event: any) {
+    let params: searchParam = {};
+    if (this.value) {
+      params['name'] = this.value
+    }
+    if (event.value) {
+      params['category'] = event.value;
+      this.getBookedSlots(params);
+    } else {
+      this.getBookedSlots(params);
+    }
+  }
+
 }

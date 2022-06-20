@@ -37,7 +37,7 @@ export class AppController {
     return res.status(200).send({
       data: [
         'Full Body Checkup',
-        'Dental Checkup',
+        'Vaccine',
         'Eye Checkup'
       ]
     });

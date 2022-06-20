@@ -10,7 +10,6 @@ export class RedisCacheService {
       username: environment.REDIS_USERNAME,
       password: environment.REDIS_PASSWORD
     });
-    // this.client = createClient();
     this.client.on('error', (err) => console.log('Redis Client Error', err));
     this.client.connect();
   }
@@ -34,6 +33,10 @@ export class RedisCacheService {
         '$.name': {
           type: SchemaFieldTypes.TEXT,
           AS: 'name'
+        },
+        '$.category': {
+          type: SchemaFieldTypes.TEXT,
+          AS: 'category'
         }
       },
       {
