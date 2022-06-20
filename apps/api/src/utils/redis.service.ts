@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { createClient, SchemaFieldTypes } from 'redis';
-
+import { environment } from '../environments/environment';
 @Injectable()
 export class RedisCacheService {
   public client;
   constructor() {
     this.client = createClient({
-      url: process.env.REDIS_HOST,
-      username: process.env.REDIS_USERNAME,
-      password: process.env.REDIS_PASSWORD
+      url: environment.REDIS_HOST,
+      username: environment.REDIS_USERNAME,
+      password: environment.REDIS_PASSWORD
     });
     // this.client = createClient();
     this.client.on('error', (err) => console.log('Redis Client Error', err));
