@@ -5,6 +5,7 @@ import { MAT_DATE_FORMATS } from '@angular/material/core';
 import * as moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
 import { MatChip } from '@angular/material/chips';
+import { Router } from '@angular/router';
 
 interface slot {
   startTime: string;
@@ -51,6 +52,7 @@ export class CustomerHomeComponent implements OnInit {
   morningSlot: slot[] = [];
   noonSlot: slot[] = [];
   eveningSlot: slot[] = [];
+  username: string | null = '';
 
   panelOpenStateMorning = false;
   panelOpenStateNoon = false;
@@ -58,7 +60,8 @@ export class CustomerHomeComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -72,6 +75,7 @@ export class CustomerHomeComponent implements OnInit {
     });
     this.getCategories();
     this.getSlots(this.todayDate);
+    this.username = localStorage.getItem('username');
   }
 
   dateChange(event: any) {
@@ -197,5 +201,11 @@ export class CustomerHomeComponent implements OnInit {
       console.log(err)
       this.toastr.error(err.message);
     })
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    this.router.navigate(['sign-in']);
   }
 }

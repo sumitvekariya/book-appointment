@@ -1,6 +1,24 @@
 <div class="customer-home-container">
       <mat-toolbar color="primary">
-        Schedule your appointment
+        <mat-toolbar-row>
+          <span>Schedule your appointment</span>
+          <span class="example-spacer"></span>
+          <mat-icon class="example-icon" aria-hidden="false">user</mat-icon>
+          <span class="material-symbols-outlined example-icon" mat-button [matMenuTriggerFor]="menu">
+            account_circle
+          </span>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="logout()">
+              <mat-icon> <span class="material-symbols-outlined">
+                power_settings_new
+              </span></mat-icon>
+              <span>Log Out</span>
+            </button>
+          </mat-menu>
+          <span>{{username}}</span>
+            
+        </mat-toolbar-row>
+
       </mat-toolbar>
 
   <div class="main-container">

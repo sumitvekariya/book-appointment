@@ -27,6 +27,7 @@ export class SignInComponent implements OnInit {
   onSubmit() {
     this.apiService.postReqWithOutToken('/login', this.signInForm.value).then((data: any) => {
       localStorage.setItem('authorization', data.data.token);
+      localStorage.setItem('username', data.data.name);
       this.toastr.success(data.message);
       if (data.data.role === 'user') {
         this.router.navigate(['customer-home']);
