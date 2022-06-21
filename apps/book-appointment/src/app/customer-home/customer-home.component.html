@@ -28,12 +28,62 @@
         </div>
     </form>
   
-    <div class="slots">
+    <!-- <div class="slots">
         <mat-chip-list selectable>
           <mat-chip #c="matChip" *ngFor="let option of slots; let index=index" [value]="option" (click)="click(c, option, index)" [ngClass]="{'red-backgroud': option.isBooked }">
             {{option['startTime'] | date : 'h:mm a'}} - {{option['endTime'] | date : 'h:mm a'}}
         </mat-chip>
         </mat-chip-list>
+    </div> -->
+    <div>
+      <mat-accordion>
+        <mat-expansion-panel (opened)="panelOpenStateMorning = true"
+                             (closed)="panelOpenStateMorning = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Morning Slots
+            </mat-panel-title>
+            <mat-panel-description></mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-chip-list selectable>
+            <mat-chip #c="matChip" *ngFor="let option of morningSlot; let index=index" [value]="option" (click)="click(c, option, index, 'morning')" [ngClass]="{'red-backgroud': option.isBooked }">
+              {{option['startTime'] | date : 'h:mm a'}} - {{option['endTime'] | date : 'h:mm a'}}
+            </mat-chip>
+          </mat-chip-list>
+        </mat-expansion-panel>
+
+        <!-- Noon -->
+        <mat-expansion-panel (opened)="panelOpenStateNoon = true"
+                             (closed)="panelOpenStateNoon = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Noon Slots
+            </mat-panel-title>
+            <mat-panel-description> </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-chip-list selectable>
+            <mat-chip #c="matChip" *ngFor="let option of noonSlot; let index=index" [value]="option" (click)="click(c, option, index, 'noon')" [ngClass]="{'red-backgroud': option.isBooked }">
+              {{option['startTime'] | date : 'h:mm a'}} - {{option['endTime'] | date : 'h:mm a'}}
+            </mat-chip>
+          </mat-chip-list>
+        </mat-expansion-panel>
+
+        <!-- Evening -->
+        <mat-expansion-panel (opened)="panelOpenStateEvening = true"
+                             (closed)="panelOpenStateEvening = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+             Evening Slots
+            </mat-panel-title>
+            <mat-panel-description></mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-chip-list selectable>
+            <mat-chip #c="matChip" *ngFor="let option of eveningSlot; let index=index" [value]="option" (click)="click(c, option, index, 'evening')" [ngClass]="{'red-backgroud': option.isBooked }">
+              {{option['startTime'] | date : 'h:mm a'}} - {{option['endTime'] | date : 'h:mm a'}}
+            </mat-chip>
+          </mat-chip-list>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
     <br>
     <div class="book-button">

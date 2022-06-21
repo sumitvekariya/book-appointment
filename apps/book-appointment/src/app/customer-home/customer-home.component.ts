@@ -11,6 +11,9 @@ interface slot {
   endTime: string;
   isSelected: boolean;
   isBooked: number;
+  isNoonSlot?: number;
+  isMorningSlot?: number;
+  isEveningSlot?: number;
 }
 
 export const MY_DATE_FORMATS = {
@@ -39,18 +42,19 @@ export class CustomerHomeComponent implements OnInit {
   todayDate!: string;
   date = new FormControl();
   DateFormGroup!: UntypedFormGroup;
-  slots: any[] = [];
-  categories: any[] = [];
+  slots: slot[] = [];
+  categories: string[] = [];
   disabled = true;
   categorySelected = false;
   selectedSlot?: slot;
   selectedDate!: string;
+  morningSlot: slot[] = [];
+  noonSlot: slot[] = [];
+  eveningSlot: slot[] = [];
 
-  foods: any[] = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'},
-  ];
+  panelOpenStateMorning = false;
+  panelOpenStateNoon = false;
+  panelOpenStateEvening = false;
 
   constructor(
     private apiService: ApiService,
@@ -81,6 +85,15 @@ export class CustomerHomeComponent implements OnInit {
       this.slots = data.data;
       this.slots.map((obj: any) => {
         obj.isSelected = false;
+        if (obj.isMorningSlot) {
+          this.morningSlot.push(obj);
+        }
+        if (obj.isNoonSlot) {
+          this.noonSlot.push(obj);
+        }
+        if (obj.isEveningSlot) {
+          this.eveningSlot.push(obj);
+        }
     });
     }).catch(err => {
       console.log(err)
@@ -88,18 +101,66 @@ export class CustomerHomeComponent implements OnInit {
     })
   }
 
-  click(chip: MatChip, option: any, index: number) {
+  click(chip: MatChip, option: any, index: number, type: string) {
     if (option.isBooked === 0) {
-      if (!this.slots[index]['isSelected'] && this.categorySelected) {
-        this.disabled = false;
-      } else {
-        this.disabled = true;
+      // if (!this.slots[index]['isSelected'] && this.categorySelected) {
+      //   this.disabled = false;
+      // } else {
+      //   this.disabled = true;
+      // }
+
+      // if (!this.slots[index]['isSelected']) {
+      //   this.selectedSlot = this.slots[index];
+      // }
+      // this.slots[index]['isSelected'] = !this.slots[index]['isSelected'];
+      if (type === 'morning') {
+        if (!this.morningSlot[index]['isSelected'] && this.categorySelected) {
+          this.disabled = false;
+        } else {
+          this.disabled = true;
+        }
+
+        if (!this.morningSlot[index]['isSelected']) {
+          this.selectedSlot = this.morningSlot[index];
+        }
+        this.morningSlot[index]['isSelected'] = !this.morningSlot[index]['isSelected'];
+
+        // set isSelected 0 in other shifts
+        this.noonSlot.map(obj => obj.isSelected = false)
+        this.eveningSlot.map(obj => obj.isSelected = false)
       }
 
-      if (!this.slots[index]['isSelected']) {
-        this.selectedSlot = this.slots[index];
+      if (type === 'noon') {
+        if (!this.noonSlot[index]['isSelected'] && this.categorySelected) {
+          this.disabled = false;
+        } else {
+          this.disabled = true;
+        }
+
+        if (!this.noonSlot[index]['isSelected']) {
+          this.selectedSlot = this.noonSlot[index];
+        }
+        this.noonSlot[index]['isSelected'] = !this.noonSlot[index]['isSelected'];
+        
+        this.morningSlot.map(obj => obj.isSelected = false)
+        this.eveningSlot.map(obj => obj.isSelected = false)
       }
-      this.slots[index]['isSelected'] = !this.slots[index]['isSelected'];
+
+      if (type === 'evening') {
+        if (!this.eveningSlot[index]['isSelected'] && this.categorySelected) {
+          this.disabled = false;
+        } else {
+          this.disabled = true;
+        }
+
+        if (!this.eveningSlot[index]['isSelected']) {
+          this.selectedSlot = this.eveningSlot[index];
+        }
+        this.eveningSlot[index]['isSelected'] = !this.eveningSlot[index]['isSelected'];
+
+        this.noonSlot.map(obj => obj.isSelected = false)
+        this.morningSlot.map(obj => obj.isSelected = false)
+      }
       chip.toggleSelected();
 
     }

@@ -53,7 +53,13 @@ export class AppService {
   async generateSlots(date: string) {
     const duration = 20;
     const startDateFormat = `${date}T10:00:00`;
-    const endDateFormat = `${date}T22:00:00`;
+    const endDateFormat = `${date}T20:00:00`;
+
+    const lunchStartDate = `${date}T12:00:00`;
+    const lunchEndDate = `${date}T13:00:00`;
+
+    const noonEndTime = `${date}T16:00:00`;
+
     let currentDate = startDateFormat;
     const slots = [];
 
@@ -62,10 +68,7 @@ export class AppService {
     const bookedSlotsKeys = await this.client.keys('booked:slots:*');
     if (bookedSlotsKeys?.length) {
         let bookedSlotsDataInRedis = await this.client.json.mGet(bookedSlotsKeys, '$');
-        bookedSlotsDataInRedis = [].concat(...bookedSlotsDataInRedis);
-        for (let slots of bookedSlotsDataInRedis) {
-          bookedSlots = [...bookedSlots, ...slots.slots];
-        }
+        bookedSlots = [].concat(...bookedSlotsDataInRedis);
     }
 
     while(new Date(currentDate) < new Date(endDateFormat)) {
@@ -80,15 +83,23 @@ export class AppService {
         }  
       }
 
-      slots.push({
+      const objToPush = {
         startTime,
         endTime,
         isBooked
-      });
+      };
 
+      if (new Date(endTime) <= new Date(lunchStartDate)) {
+        slots.push({ ...objToPush, isMorningSlot: 1 });
+      } else if (new Date(startTime) >= new Date(lunchEndDate) && new Date(endTime) <= new Date(noonEndTime)) {
+        slots.push({ ...objToPush, isNoonSlot: 1 });
+      } else if (new Date(startTime) >= new Date(noonEndTime)){
+        slots.push({ ...objToPush, isEveningSlot: 1 });
+      }
       currentDate = endTime;
     }
-    return slots
+    
+    return slots;
   }
 
   async bookSlot(bookSlotDto: BookSlotDto, userData: Login) {
@@ -102,8 +113,11 @@ export class AppService {
   
       const keysForIncomingdate = await this.client.keys(`booked:slots:*`);
 
-      let result = await this.client.json.mGet(keysForIncomingdate, '$');
-      result = [].concat(...result);
+      let result = []
+      if (keysForIncomingdate?.length) {
+        result = await this.client.json.mGet(keysForIncomingdate, '$');
+        result = [].concat(...result);
+      }
 
       if (result?.length) {
           const bookedSlot = result.find(obj => obj.startTime === bookSlotDto.startTime && obj.endTime === bookSlotDto.endTime);
