@@ -54,9 +54,8 @@
         </mat-chip-list>
     </div> -->
     <div>
-      <mat-accordion>
-        <mat-expansion-panel (opened)="panelOpenStateMorning = true"
-                             (closed)="panelOpenStateMorning = false">
+      <mat-accordion multi>
+        <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
               Morning Slots
@@ -71,8 +70,7 @@
         </mat-expansion-panel>
 
         <!-- Noon -->
-        <mat-expansion-panel (opened)="panelOpenStateNoon = true"
-                             (closed)="panelOpenStateNoon = false">
+        <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
               Noon Slots
@@ -87,8 +85,7 @@
         </mat-expansion-panel>
 
         <!-- Evening -->
-        <mat-expansion-panel (opened)="panelOpenStateEvening = true"
-                             (closed)="panelOpenStateEvening = false">
+        <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
              Evening Slots

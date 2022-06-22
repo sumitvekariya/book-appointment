@@ -54,10 +54,6 @@ export class CustomerHomeComponent implements OnInit {
   eveningSlot: slot[] = [];
   username: string | null = '';
 
-  panelOpenStateMorning = false;
-  panelOpenStateNoon = false;
-  panelOpenStateEvening = false;
-
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
