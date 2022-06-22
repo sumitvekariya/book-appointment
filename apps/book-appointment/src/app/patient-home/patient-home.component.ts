@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../shared/api.service';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
@@ -29,16 +29,10 @@ export const MY_DATE_FORMATS = {
 
 @Component({
   selector: 'book-appointmnet-customer-home',
-  templateUrl: './customer-home.component.html',
-  styleUrls: ['./customer-home.component.scss'],
-  providers: [
-    {
-        provide: MAT_DATE_FORMATS,
-        useValue: MY_DATE_FORMATS
-    }
-]
+  templateUrl: './patient-home.component.html',
+  styleUrls: ['./patient-home.component.scss']
 })
-export class CustomerHomeComponent implements OnInit {
+export class PatientHomeComponent implements OnInit {
 
   todayDate!: string;
   date = new FormControl();
@@ -52,7 +46,7 @@ export class CustomerHomeComponent implements OnInit {
   morningSlot: slot[] = [];
   noonSlot: slot[] = [];
   eveningSlot: slot[] = [];
-  username: string | null = '';
+  selectedChip?: slot;
 
   constructor(
     private apiService: ApiService,
@@ -71,7 +65,6 @@ export class CustomerHomeComponent implements OnInit {
     });
     this.getCategories();
     this.getSlots(this.todayDate);
-    this.username = localStorage.getItem('username');
   }
 
   dateChange(event: any) {
@@ -83,6 +76,9 @@ export class CustomerHomeComponent implements OnInit {
   getSlots(date: string) {
     this.apiService.postReqWithToken('/slots', { date }).then((data: any) => {
       this.slots = data.data;
+      this.morningSlot = [];
+      this.noonSlot = [];
+      this.eveningSlot = [];
       this.slots.map((obj: any) => {
         obj.isSelected = false;
         if (obj.isMorningSlot) {
@@ -101,68 +97,9 @@ export class CustomerHomeComponent implements OnInit {
     })
   }
 
-  click(chip: MatChip, option: any, index: number, type: string) {
+  onChipClick(chip: MatChip, option: any, index: number, type: string) {
     if (option.isBooked === 0) {
-      // if (!this.slots[index]['isSelected'] && this.categorySelected) {
-      //   this.disabled = false;
-      // } else {
-      //   this.disabled = true;
-      // }
-
-      // if (!this.slots[index]['isSelected']) {
-      //   this.selectedSlot = this.slots[index];
-      // }
-      // this.slots[index]['isSelected'] = !this.slots[index]['isSelected'];
-      if (type === 'morning') {
-        if (!this.morningSlot[index]['isSelected'] && this.categorySelected) {
-          this.disabled = false;
-        } else {
-          this.disabled = true;
-        }
-
-        if (!this.morningSlot[index]['isSelected']) {
-          this.selectedSlot = this.morningSlot[index];
-        }
-        this.morningSlot[index]['isSelected'] = !this.morningSlot[index]['isSelected'];
-
-        // set isSelected 0 in other shifts
-        this.noonSlot.map(obj => obj.isSelected = false)
-        this.eveningSlot.map(obj => obj.isSelected = false)
-      }
-
-      if (type === 'noon') {
-        if (!this.noonSlot[index]['isSelected'] && this.categorySelected) {
-          this.disabled = false;
-        } else {
-          this.disabled = true;
-        }
-
-        if (!this.noonSlot[index]['isSelected']) {
-          this.selectedSlot = this.noonSlot[index];
-        }
-        this.noonSlot[index]['isSelected'] = !this.noonSlot[index]['isSelected'];
-        
-        this.morningSlot.map(obj => obj.isSelected = false)
-        this.eveningSlot.map(obj => obj.isSelected = false)
-      }
-
-      if (type === 'evening') {
-        if (!this.eveningSlot[index]['isSelected'] && this.categorySelected) {
-          this.disabled = false;
-        } else {
-          this.disabled = true;
-        }
-
-        if (!this.eveningSlot[index]['isSelected']) {
-          this.selectedSlot = this.eveningSlot[index];
-        }
-        this.eveningSlot[index]['isSelected'] = !this.eveningSlot[index]['isSelected'];
-
-        this.noonSlot.map(obj => obj.isSelected = false)
-        this.morningSlot.map(obj => obj.isSelected = false)
-      }
-      chip.toggleSelected();
-
+      this.selectedSlot = option;
     }
 
   }

@@ -25,28 +25,15 @@ interface searchParam {
   category?: string;
   name?: string;
 }
-export const MY_DATE_FORMATS = {
-  parse: {
-    dateInput: 'YYYY-MM-DD',
-  },
-  display: {
-    dateInput: 'MM-DD-YYYY'
-  },
-};
+
 
 
 @Component({
   selector: 'book-appointmnet-admin-home',
   templateUrl: './admin-home.component.html',
   styleUrls: ['./admin-home.component.scss'],
-  providers: [
-    {
-        provide: MAT_DATE_FORMATS,
-        useValue: MY_DATE_FORMATS
-    }
-  ],
   animations: [
-    trigger('detailExpand', [
+      trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0'})),
       state('expanded', style({height: '*'})),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
@@ -140,6 +127,12 @@ export class AdminHomeComponent implements OnInit {
     } else {
       this.getBookedSlots(params);
     }
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    this.router.navigate(['sign-in']);
   }
 
 }

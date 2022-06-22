@@ -32,7 +32,7 @@ export class AppService {
           email: loginDto.email,
           token: redisData?.token ? redisData?.token : token,
           name: loginDto.email.split('@')[0],
-          role: loginDto.email.indexOf('user') >= 0 ? 'user' : 'admin'
+          role: loginDto.email.indexOf('admin') >= 0 ? 'admin' : 'user'
         };
 
         if (!redisData?.token) {

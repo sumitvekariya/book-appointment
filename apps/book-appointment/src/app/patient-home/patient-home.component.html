@@ -15,7 +15,7 @@
               <span>Log Out</span>
             </button>
           </mat-menu>
-          <span>{{username}}</span>
+          <span>Patient</span>
             
         </mat-toolbar-row>
 
@@ -45,25 +45,18 @@
           </div>
         </div>
     </form>
-  
-    <!-- <div class="slots">
-        <mat-chip-list selectable>
-          <mat-chip #c="matChip" *ngFor="let option of slots; let index=index" [value]="option" (click)="click(c, option, index)" [ngClass]="{'red-backgroud': option.isBooked }">
-            {{option['startTime'] | date : 'h:mm a'}} - {{option['endTime'] | date : 'h:mm a'}}
-        </mat-chip>
-        </mat-chip-list>
-    </div> -->
+
     <div>
       <mat-accordion multi>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Morning Slots
+              Morning Slots <span class="time">  8 AM - 12 PM </span>
             </mat-panel-title>
             <mat-panel-description></mat-panel-description>
           </mat-expansion-panel-header>
           <mat-chip-list selectable>
-            <mat-chip #c="matChip" *ngFor="let option of morningSlot; let index=index" [value]="option" (click)="click(c, option, index, 'morning')" [ngClass]="{'red-backgroud': option.isBooked }">
+            <mat-chip [selected]="selectedSlot === option ? true : false" #morningSlots="matChip" *ngFor="let option of morningSlot; let index=index" [value]="option" (click)="onChipClick(morningSlots, option, index, 'morning')" [ngClass]="{'green-backgroud': option.isBooked }">
               {{option['startTime'] | date : 'h:mm a'}} - {{option['endTime'] | date : 'h:mm a'}}
             </mat-chip>
           </mat-chip-list>
@@ -73,12 +66,12 @@
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Noon Slots
+              Noon Slots <span class="noon-time">  1 PM - 4 PM </span>
             </mat-panel-title>
             <mat-panel-description> </mat-panel-description>
           </mat-expansion-panel-header>
           <mat-chip-list selectable>
-            <mat-chip #c="matChip" *ngFor="let option of noonSlot; let index=index" [value]="option" (click)="click(c, option, index, 'noon')" [ngClass]="{'red-backgroud': option.isBooked }">
+            <mat-chip [selected]="selectedSlot === option ? true : false" #noonSlots="matChip" *ngFor="let option of noonSlot; let index=index" [value]="option" (click)="onChipClick(noonSlots, option, index, 'noon')" [ngClass]="{'green-backgroud': option.isBooked }">
               {{option['startTime'] | date : 'h:mm a'}} - {{option['endTime'] | date : 'h:mm a'}}
             </mat-chip>
           </mat-chip-list>
@@ -88,12 +81,12 @@
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
-             Evening Slots
+             Evening Slots <span class="eve-time">  4 PM - 8 PM </span>
             </mat-panel-title>
             <mat-panel-description></mat-panel-description>
           </mat-expansion-panel-header>
           <mat-chip-list selectable>
-            <mat-chip #c="matChip" *ngFor="let option of eveningSlot; let index=index" [value]="option" (click)="click(c, option, index, 'evening')" [ngClass]="{'red-backgroud': option.isBooked }">
+            <mat-chip [selected]="selectedSlot === option ? true : false" #eveningSlots="matChip" *ngFor="let option of eveningSlot; let index=index" [value]="option" (click)="onChipClick(eveningSlots, option, index, 'evening')" [ngClass]="{'green-backgroud': option.isBooked }">
               {{option['startTime'] | date : 'h:mm a'}} - {{option['endTime'] | date : 'h:mm a'}}
             </mat-chip>
           </mat-chip-list>
@@ -102,7 +95,7 @@
     </div>
     <br>
     <div class="book-button">
-      <button mat-raised-button color="primary" [disabled]="disabled" (click)="bookAppointment()">Book</button>
+      <button mat-raised-button color="primary" [disabled]="DateFormGroup.invalid || !selectedSlot" (click)="bookAppointment()">Book</button>
     </div>
   </div>
 </div>

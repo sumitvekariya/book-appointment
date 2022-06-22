@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
-import { CustomerHomeComponent } from './customer-home/customer-home.component';
+import { PatientHomeComponent } from './patient-home/patient-home.component';
+import { AuthGuard } from './guard/auth.guard';
 import { SignInComponent } from './sign-in/sign-in.component'
 
 @NgModule({
@@ -19,11 +20,13 @@ import { SignInComponent } from './sign-in/sign-in.component'
       },
       {
         path: 'customer-home',
-        component: CustomerHomeComponent
+        component: PatientHomeComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'admin-home',
-        component: AdminHomeComponent
+        component: AdminHomeComponent,
+        canActivate: [AuthGuard]
       }
     ])
   ],

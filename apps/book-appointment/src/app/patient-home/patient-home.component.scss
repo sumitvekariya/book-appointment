@@ -9,9 +9,21 @@
   }
   
   .main-container {
-    max-width: 90%;
+    max-width: 60%;
     margin: auto;
     padding: 20px;
+
+    .time {
+      margin-left: 50px;
+    }
+
+    .eve-time {
+      margin-left: 55px;
+    }
+
+    .noon-time {
+      margin-left: 69px;
+    }
 
     .select-container {
       display: inline-flex;
@@ -32,7 +44,8 @@
     background-color: #fdcd94;
   }
 
-  .red-backgroud {
-    background-color: #f79c9c;
+  .green-backgroud {
+    background-color: #007b0f;
+    color: white;
   }
 }

@@ -11,8 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { MaterialModule } from './material.module';
 import { ToastrModule } from 'ngx-toastr';
-import { CustomerHomeComponent } from './customer-home/customer-home.component';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { PatientHomeComponent } from './patient-home/patient-home.component';
 import {
   MAT_MOMENT_DATE_FORMATS,
   MomentDateAdapter,
@@ -21,7 +20,7 @@ import {
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent, SignInComponent, CustomerHomeComponent, AdminHomeComponent],
+  declarations: [AppComponent, NxWelcomeComponent, SignInComponent, PatientHomeComponent, AdminHomeComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -34,14 +33,7 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
       preventDuplicates: true
     })
   ],
-  providers: [
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-    },
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
-  ],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
