@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { RedisCacheService } from '../utils/redis.service';
+import { RedisClientService } from '../utils/redis.service';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -15,7 +15,7 @@ export class AuthMiddleware implements NestMiddleware {
         message: "Unauthorized",
       })
     }
-    const redisCache = new RedisCacheService();
+    const redisCache = new RedisClientService();
     const client = redisCache.getClient();
     
     const tokenData = await client.json.get(req.headers.authorization);
