@@ -21,7 +21,12 @@ export class AppService {
 
   async login(loginDto: LoginDto): Promise<Login> {
     try {
+      const emails = ['patient1@gmail.com', 'patient2@gmail.com', 'patient3@gmail.com', 'patient4@gmail.com', 'admin@gmail.com'];
+
       if (loginDto.email && loginDto.password) {
+        if (emails.indexOf(loginDto.email) === -1) {
+          throw new Error('Invalid Credentials');
+        }
         const token = Math.ceil((Math.random() * new Date().getTime())).toString();
 
         const key = `${loginDto.email}`;

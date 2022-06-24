@@ -36,7 +36,7 @@ export class SignInComponent implements OnInit {
       }
     }).catch(err => {
       console.log(err)
-      this.toastr.success(err.message);
+      this.toastr.error(err.error.message);
     })
   }
 }

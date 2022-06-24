@@ -3,6 +3,18 @@
     max-width: 50%;
     margin: auto;
 
+    .redis-icon {
+        margin: auto;
+        text-align: center;
+        height: 30px;
+        margin-bottom: 50px;
+        font-size: 5em;
+    }
+
+    mat-card-title {
+        text-align: center;
+    }
+
     mat-form-field {
         width: 100%;
     }

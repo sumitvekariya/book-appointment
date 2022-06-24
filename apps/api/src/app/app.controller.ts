@@ -23,11 +23,17 @@ export class AppController {
     @Body() loginDto: LoginDto,
     @Res() res: Response
   ) {
-    const response = await this.appService.login(loginDto);
-    return res.status(200).send({
-      message: "Login successfully",
-      data: response
-    });
+    try {
+      const response = await this.appService.login(loginDto);
+      return res.status(200).send({
+        message: "Login successfully",
+        data: response
+      });
+    } catch (err) {
+      return res.status(400).send({
+        message: err.message
+      });
+    }
   }
 
   @Get('categories')
