@@ -1,0 +1,6 @@
+{
+    "root": "dist/apps/book-appointment/",
+    "routes": {
+        "/**/*.html": "index.html"
+    }
+}
