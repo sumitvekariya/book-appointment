@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 
 import { AppComponent } from './app.component';
-import { NxWelcomeComponent } from './nx-welcome.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -20,7 +19,7 @@ import {
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent, SignInComponent, PatientHomeComponent, AdminHomeComponent],
+  declarations: [AppComponent, SignInComponent, PatientHomeComponent, AdminHomeComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
