@@ -17,6 +17,8 @@ export class RedisClientService {
 
     // Establish a connection
     this.client.connect();
+
+    this.setCategories();
   }
 
   getClient() {
@@ -51,6 +53,21 @@ export class RedisClientService {
       });
     } catch (err) {
       console.log("Index already created")
+    }
+  }
+
+  async setCategories() {
+    const categoryKey = `category`;
+    const categories = [
+      'Full Body Checkup',
+      'Vaccine',
+      'Eye Checkup'
+    ];
+  
+    // Check whether same key exist or not
+    const existingData = await this.client.json.get(categoryKey);
+    if (!existingData) {
+      this.client.json.set(categoryKey, '$', categories);
     }
   }
 }

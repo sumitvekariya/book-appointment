@@ -201,4 +201,10 @@ export class AppService {
       throw err;
     }
   }
+
+  async getCategories() {
+    const categoryKey = `category`;
+    const categories = await this.client.json.get(categoryKey);
+    return categories;
+  }
 }

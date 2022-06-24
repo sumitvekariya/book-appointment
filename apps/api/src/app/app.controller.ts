@@ -37,15 +37,12 @@ export class AppController {
   }
 
   @Get('categories')
-  getCategories(
+  async getCategories(
     @Res() res: Response
   ) {
+    const data = await this.appService.getCategories();
     return res.status(200).send({
-      data: [
-        'Full Body Checkup',
-        'Vaccine',
-        'Eye Checkup'
-      ]
+      data
     });
   }
 
