@@ -28,7 +28,7 @@ import { SignInComponent } from './sign-in/sign-in.component'
         component: AdminHomeComponent,
         canActivate: [AuthGuard]
       }
-    ])
+    ], {useHash: true})
   ],
   exports: [RouterModule]
 })
