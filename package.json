@@ -8,7 +8,8 @@
     "start:FE": "nx serve book-appointment",
     "start:BE": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "heroku-postbuild": "nx build $PROJECT_NAME --prod"
   },
   "private": true,
   "dependencies": {
