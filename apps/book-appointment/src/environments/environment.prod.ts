@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  endPoint: 'https://redis-book-appointment-api.herokuapp.com/api'
+  endPoint: 'https://book-appointment-api.onrender.com/api'
 };
