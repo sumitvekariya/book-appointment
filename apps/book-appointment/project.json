@@ -96,6 +96,9 @@
         "jestConfig": "apps/book-appointment/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "deploy": {
+      "executor": "angular-cli-ghpages:deploy"
     }
   },
   "tags": []
